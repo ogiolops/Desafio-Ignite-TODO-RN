@@ -21,9 +21,13 @@ export const styles = StyleSheet.create({
   task: {
     flex: 1,
     color: '#F2F2F2',
-    textAlign: 'justify',
   },
-  image: {
+  taskCompleted: {
+    flex: 1,
+    color: '#808080',
+    textDecorationLine: 'line-through',
+  },
+  image: { 
     width: 32,
     height: 32,
   }

@@ -13,12 +13,11 @@ export function Home(){
     isCompleted: boolean,
   }
 
-  let idTask = uuid.v4()
-
-  console.log(idTask)
-
+  let idTask = uuid.v4();
   const [taskList, setTaskList] = useState<taskList[]>([]);
   const totalTasks = taskList.length
+  const taskConcluided = taskList.filter(task => task.isCompleted === true);
+  const endedTask = taskConcluided.length
   const [taskName, setTaskName] = useState('')
 
 
@@ -32,9 +31,13 @@ export function Home(){
   }
 
   function deleteTask(id: any) {
+    setTaskList((taskList) => taskList.filter((task) => task.id !== id))
+  }
 
-    
-
+  function taskComplete( id: any ){
+    setTaskList((task) => task.map((task) => {task.id === id ? (task.isCompleted = !task.isCompleted) : null
+    return task
+  }))
   }
 
 
@@ -49,7 +52,12 @@ export function Home(){
           onChangeText={setTaskName}
           value={taskName}
         />
-        <TouchableOpacity style={styles.button} onPress={createNewTask} >
+        <TouchableOpacity 
+          style={taskName ? styles.buttonActive : styles.buttonDefault} 
+          onPress={createNewTask} 
+          disabled={ taskName ? false : true } 
+          
+        >
           <Image source={require('../../../components/assets/plus.png')} />
         </TouchableOpacity>
       </View>
@@ -66,7 +74,7 @@ export function Home(){
             <View style={styles.info} >
               <Text style={styles.completedText} >Concluídas</Text>
               <View style={styles.counterRadius} >
-                <Text style={styles.counter}>0</Text>
+                <Text style={styles.counter}>{endedTask}</Text>
               </View>
               
             </View>
@@ -80,7 +88,8 @@ export function Home(){
               key={item.id}
               taskItem={item.taskName}
               isCompleted={item.isCompleted}
-              onDeliteTask={deleteTask}
+              onDeliteTask={ () => deleteTask(item.id) }
+              onConcludedTask={() => taskComplete(item.id)}
             />
           )}
           showsVerticalScrollIndicator={false}
